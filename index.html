@@ -34,6 +34,8 @@
         header {
             padding:40px 0 20px;
             border-bottom:1px solid rgba(255,68,68,0.1);
+            position:relative;
+            z-index:10;
         }
 
         .logo {
@@ -68,12 +70,38 @@
             50% { opacity:0.3; }
         }
 
-        .hero {
-            padding:80px 0;
+        .hero-section {
+            position:relative;
+            min-height:600px;
+            display:flex;
+            align-items:center;
             border-bottom:1px solid rgba(255,68,68,0.1);
+            overflow:hidden;
         }
 
-        .hero h1 {
+        .globe-container {
+            position:absolute;
+            inset:0;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            opacity:0.6;
+        }
+
+        #globe-canvas {
+            width:100%;
+            height:100%;
+            max-width:800px;
+            max-height:800px;
+        }
+
+        .hero-content {
+            position:relative;
+            z-index:5;
+            padding:80px 0;
+        }
+
+        .hero-content h1 {
             font-family:'Space Grotesk',sans-serif;
             font-size:clamp(40px,8vw,100px);
             font-weight:700;
@@ -82,6 +110,14 @@
             margin-bottom:20px;
             opacity:0;
             animation:fadeUp 0.8s ease-out 0.1s forwards;
+        }
+
+        .hero-subtitle {
+            font-size:16px;
+            color:var(--red);
+            margin-bottom:12px;
+            opacity:0;
+            animation:fadeUp 0.8s ease-out 0.2s forwards;
         }
 
         .hero-text {
@@ -96,6 +132,22 @@
         @keyframes fadeUp {
             from { opacity:0; transform:translateY(30px); }
             to { opacity:1; transform:translateY(0); }
+        }
+
+        .banner {
+            width:100%;
+            height:400px;
+            background:url('https://i.imgur.com/7nn91Eh.png') center/cover;
+            border:2px solid rgba(255,68,68,0.2);
+            margin:60px 0;
+            position:relative;
+        }
+
+        .banner::after {
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(to top,var(--bg),transparent);
         }
 
         .stats {
@@ -144,39 +196,151 @@
             border-bottom:1px solid rgba(255,68,68,0.2);
         }
 
-        .clips {
+        .gallery {
             display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
-            gap:40px;
+            grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+            gap:30px;
             margin-bottom:80px;
         }
 
-        .clip {
+        .video-card {
             background:var(--dark);
             border:1px solid rgba(255,68,68,0.15);
             overflow:hidden;
-            transition:border-color 0.3s,transform 0.3s;
+            cursor:pointer;
+            transition:all 0.3s;
+            position:relative;
         }
 
-        .clip:hover {
+        .video-card:hover {
             border-color:var(--red);
             transform:translateY(-4px);
         }
 
-        .clip iframe {
-            width:100%;
-            height:300px;
-            border:none;
-            display:block;
+        .video-card.featured {
+            grid-column:span 2;
+            border-color:var(--red);
         }
 
-        .clip-label {
-            padding:16px 20px;
-            font-size:11px;
-            text-transform:uppercase;
-            letter-spacing:2px;
+        .video-thumbnail {
+            width:100%;
+            height:280px;
+            background:var(--gray);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .video-card.featured .video-thumbnail {
+            height:400px;
+        }
+
+        .play-button {
+            width:80px;
+            height:80px;
+            background:rgba(255,68,68,0.9);
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            transition:all 0.3s;
+        }
+
+        .video-card:hover .play-button {
+            background:var(--red);
+            transform:scale(1.1);
+        }
+
+        .play-button::after {
+            content:'';
+            width:0;
+            height:0;
+            border-left:20px solid var(--bg);
+            border-top:12px solid transparent;
+            border-bottom:12px solid transparent;
+            margin-left:4px;
+        }
+
+        .video-info {
+            padding:20px;
             border-top:1px solid rgba(255,68,68,0.1);
+        }
+
+        .video-title {
+            font-family:'Space Grotesk',sans-serif;
+            font-size:16px;
+            font-weight:600;
+            margin-bottom:6px;
+            color:var(--text);
+        }
+
+        .video-card.featured .video-title {
+            font-size:20px;
+            color:var(--red);
+        }
+
+        .video-desc {
+            font-size:11px;
             color:var(--dim);
+            text-transform:uppercase;
+            letter-spacing:1px;
+        }
+
+        .featured-badge {
+            position:absolute;
+            top:16px;
+            left:16px;
+            background:var(--red);
+            color:var(--bg);
+            padding:6px 12px;
+            font-size:10px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            z-index:2;
+        }
+
+        .video-modal {
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.95);
+            z-index:1000;
+            padding:40px;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .video-modal.active {
+            display:flex;
+        }
+
+        .modal-content {
+            width:100%;
+            max-width:1200px;
+            position:relative;
+        }
+
+        .modal-close {
+            position:absolute;
+            top:-40px;
+            right:0;
+            background:none;
+            border:none;
+            color:var(--text);
+            font-size:32px;
+            cursor:pointer;
+            padding:10px;
+            line-height:1;
+        }
+
+        .modal-iframe {
+            width:100%;
+            height:calc(100vh - 160px);
+            max-height:675px;
+            border:2px solid var(--red);
         }
 
         .accounts {
@@ -214,6 +378,44 @@
             margin-bottom:8px;
         }
 
+        .service-section {
+            background:var(--dark);
+            border:1px solid rgba(255,68,68,0.2);
+            padding:60px 40px;
+            margin:80px 0;
+            text-align:center;
+        }
+
+        .service-title {
+            font-family:'Space Grotesk',sans-serif;
+            font-size:clamp(28px,5vw,48px);
+            font-weight:700;
+            color:var(--red);
+            margin-bottom:20px;
+            letter-spacing:-1px;
+        }
+
+        .service-text {
+            font-size:14px;
+            color:var(--dim);
+            line-height:1.8;
+            max-width:700px;
+            margin:0 auto 30px;
+        }
+
+        .service-cta {
+            font-family:'Space Grotesk',sans-serif;
+            font-size:18px;
+            color:var(--text);
+            margin-bottom:12px;
+        }
+
+        .service-contact {
+            font-size:16px;
+            color:var(--red);
+            font-weight:600;
+        }
+
         .contact {
             padding:60px 0 80px;
             text-align:center;
@@ -238,8 +440,11 @@
 
         @media (max-width:768px) {
             .container { padding:0 20px; }
-            .clips { grid-template-columns:1fr; }
+            .gallery { grid-template-columns:1fr; }
+            .video-card.featured { grid-column:span 1; }
             .accounts { grid-template-columns:1fr; }
+            .service-section { padding:40px 20px; }
+            .video-modal { padding:20px; }
         }
     </style>
 </head>
@@ -255,10 +460,18 @@
             </div>
         </header>
 
-        <section class="hero">
-            <h1>Spy / Soldier Main</h1>
-            <p class="hero-text">St. Petersburg based TF2 player specializing in trickstabs and airshots. 5000+ hours logged. Clips below.</p>
+        <section class="hero-section">
+            <div class="globe-container">
+                <canvas id="globe-canvas"></canvas>
+            </div>
+            <div class="hero-content">
+                <div class="hero-subtitle">Performance on par with professional players</div>
+                <h1>Spy / Soldier Main</h1>
+                <p class="hero-text">St. Petersburg based TF2 player specializing in trickstabs and airshots. 5000+ hours logged across competitive and casual play.</p>
+            </div>
         </section>
+
+        <div class="banner"></div>
 
         <div class="stats">
             <div class="stat">
@@ -275,20 +488,45 @@
             </div>
         </div>
 
-        <h2 class="section-title">Clips</h2>
-        <div class="clips">
-            <div class="clip">
-                <iframe src="https://streamable.com/e/4lsni1?autoplay=1&nocontrols=1" allowfullscreen></iframe>
-                <div class="clip-label">Trickstabs</div>
+        <h2 class="section-title">Clip Gallery</h2>
+        <div class="gallery">
+            <div class="video-card featured" data-url="https://streamable.com/4lsni1">
+                <div class="featured-badge">Featured</div>
+                <div class="video-thumbnail">
+                    <div class="play-button"></div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">Trickstab Montage</div>
+                    <div class="video-desc">60 Second Highlight Reel</div>
+                </div>
             </div>
-            <div class="clip">
-                <iframe src="https://streamable.com/e/xr0oqx?autoplay=1&nocontrols=1" allowfullscreen></iframe>
-                <div class="clip-label">Soldier Airshots</div>
+            <div class="video-card" data-url="https://streamable.com/xr0oqx">
+                <div class="video-thumbnail">
+                    <div class="play-button"></div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">Soldier Airshots</div>
+                    <div class="video-desc">Direct Hits</div>
+                </div>
             </div>
-            <div class="clip">
-                <iframe src="https://streamable.com/e/l8e0cx?autoplay=1&nocontrols=1" allowfullscreen></iframe>
-                <div class="clip-label">Airshots</div>
+            <div class="video-card" data-url="https://streamable.com/l8e0cx">
+                <div class="video-thumbnail">
+                    <div class="play-button"></div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">More Airshots</div>
+                    <div class="video-desc">Soldier Gameplay</div>
+                </div>
             </div>
+        </div>
+
+        <div class="service-section">
+            <h2 class="service-title">Free Website Design</h2>
+            <p class="service-text">
+                I build custom websites for TF2 players and gaming communities. Professional design, clean code, your domain. No charge.
+            </p>
+            <div class="service-cta">Interested? Hit me up on Steam</div>
+            <div class="service-contact">@jocelyyn</div>
         </div>
 
         <h2 class="section-title">Accounts</h2>
@@ -308,5 +546,129 @@
             <div class="discord">@zynkom</div>
         </section>
     </div>
+
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeVideo()">&times;</button>
+            <iframe class="modal-iframe" id="modalIframe" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        const videoCards = document.querySelectorAll('.video-card');
+        const modal = document.getElementById('videoModal');
+        const iframe = document.getElementById('modalIframe');
+
+        videoCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const url = card.dataset.url;
+                iframe.src = `https://streamable.com/e/${url.split('/').pop()}`;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function closeVideo() {
+            modal.classList.remove('active');
+            iframe.src = '';
+            document.body.style.overflow = '';
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeVideo();
+        });
+
+        const canvas = document.getElementById('globe-canvas');
+        const ctx = canvas.getContext('2d', { alpha: true });
+        const TAU = Math.PI * 2;
+        const N = 8000;
+        const pts = [];
+        let w = 0, h = 0, cx = 0, cy = 0, R = 0, rotY = 0, t = 0;
+        const tX = 0.76;
+
+        function build() {
+            pts.length = 0;
+            for (let i = 0; i < N; i++) {
+                const k = i + 0.5;
+                const y = 1 - (k / N) * 2;
+                const r = Math.sqrt(Math.max(0, 1 - y * y));
+                const phi = TAU * k * 0.618;
+                const x = Math.cos(phi) * r;
+                const z = Math.sin(phi) * r;
+                const la = Math.asin(y) * 180 / Math.PI;
+                const lo = Math.atan2(z, x) * 180 / Math.PI;
+                
+                let s = 0;
+                s = Math.max(s, land(la, lo, 46, -103, 18, 30));
+                s = Math.max(s, land(la, lo, 24, -102, 10, 16));
+                s = Math.max(s, land(la, lo, -16, -60, 23, 14));
+                s = Math.max(s, land(la, lo, 52, 15, 12, 18));
+                s = Math.max(s, land(la, lo, 8, 20, 28, 18));
+                s = Math.max(s, land(la, lo, 39, 92, 20, 42));
+                s = Math.max(s, land(la, lo, 20, 112, 12, 16));
+                s = Math.max(s, land(la, lo, -25, 134, 10, 14));
+                
+                if (s > 0.25 || (s > 0.1 && Math.random() < 0.02)) {
+                    pts.push({ x, y, z, sz: 0.6 + Math.random() * 0.5 });
+                }
+            }
+        }
+
+        function land(la, lo, cla, clo, lr, lonr) {
+            const dy = (la - cla) / lr;
+            let dx = lo - clo;
+            while (dx > 180) dx -= 360;
+            while (dx < -180) dx += 360;
+            dx /= lonr;
+            return Math.exp(-(dx * dx + dy * dy));
+        }
+
+        function resize() {
+            const rect = canvas.getBoundingClientRect();
+            w = rect.width;
+            h = rect.height;
+            canvas.width = w;
+            canvas.height = h;
+            cx = w / 2;
+            cy = h / 2;
+            R = Math.min(w, h) * 0.35;
+        }
+
+        function draw() {
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, w, h);
+            
+            const cY = Math.cos(rotY);
+            const sY = Math.sin(rotY);
+            const cX = Math.cos(tX);
+            const sX = Math.sin(tX);
+            
+            for (let i = 0; i < pts.length; i++) {
+                const p = pts[i];
+                const y1 = p.y * cX - p.z * sX;
+                const z1 = p.y * sX + p.z * cX;
+                const vx = p.x * cY + z1 * sY;
+                const vy = y1;
+                const vz = -p.x * sY + z1 * cY;
+                
+                if (vz <= 0) continue;
+                
+                const alpha = (0.3 + vz * 0.4) * (vz > 0.15 ? 1 : vz / 0.15);
+                ctx.fillStyle = `rgba(255,68,68,${alpha})`;
+                ctx.beginPath();
+                ctx.arc(cx + vx * R, cy + vy * R, p.sz, 0, TAU);
+                ctx.fill();
+            }
+            
+            rotY += 0.002;
+            t += 0.01;
+        }
+
+        build();
+        resize();
+        requestAnimationFrame(draw);
+        
+        window.addEventListener('resize', resize);
+    </script>
 </body>
 </html>
