@@ -1,3 +1,5 @@
+<!-- 2026-05-03T10:00:00-04:00 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,22 +141,25 @@
             to { opacity:1; transform:translateY(0); }
         }
 
-        .banner {
-            display:flex;
-            justify-content:center;
-            margin:80px 0;
+        /* Clean Photo Block for uploaded image */
+        .showcase-photo {
+            display: flex;
+            justify-content: center;
+            margin: 80px 0;
         }
 
-        .banner img {
-            max-width:100%;
-            height:auto;
-            border:1px solid rgba(255,68,68,0.2);
-            border-radius:4px;
+        .showcase-photo img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            border-radius: 4px;
+            /* No filters applied, keeps normal resolution naturally */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .stats {
             display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
             gap:1px;
             background:rgba(255,68,68,0.15);
             border:1px solid rgba(255,68,68,0.15);
@@ -165,8 +170,9 @@
 
         .stat {
             background:var(--bg);
-            padding:40px 30px;
+            padding:30px 20px;
             transition:background 0.3s;
+            text-align: center;
         }
 
         .stat:hover {
@@ -183,7 +189,7 @@
 
         .stat-value {
             font-family:'Space Grotesk',sans-serif;
-            font-size:36px;
+            font-size:32px;
             font-weight:700;
             color:var(--red);
             letter-spacing:-1px;
@@ -195,8 +201,28 @@
             font-weight:700;
             text-transform:uppercase;
             letter-spacing:2px;
-            margin:100px 0 50px;
+            margin:100px 0 20px;
             text-align:center;
+        }
+
+        /* New UI Indicator for the Cards */
+        .card-indicator {
+            text-align: center;
+            font-size: 11px;
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        .card-indicator span {
+            color: var(--red);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .gallery-stack {
@@ -496,8 +522,8 @@
             </div>
         </section>
 
-        <div class="banner">
-            <img src="https://i.imgur.com/7nn91Eh.png" alt="Zynkom Banner">
+        <div class="showcase-photo">
+            <img src="image_e18b7a.jpg" alt="Showcase Photo">
         </div>
 
         <div class="stats">
@@ -513,9 +539,21 @@
                 <div class="stat-label">Secondary</div>
                 <div class="stat-value">Soldier</div>
             </div>
+            <div class="stat">
+                <div class="stat-label">Steam Level</div>
+                <div class="stat-value">20</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Badges</div>
+                <div class="stat-value">17</div>
+            </div>
         </div>
 
         <h2 class="section-title">Clip Gallery</h2>
+        
+        <div class="card-indicator">
+            ▼ <span>Click cards behind</span> to cycle videos ▼
+        </div>
         
         <div class="gallery-stack" id="videoStack">
             <div class="video-card" data-url="4lsni1">
