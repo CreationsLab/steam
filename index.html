@@ -1,1 +1,520 @@
-index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZYNKOM | TF2 PRODIGY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --red: #FF4545;
+            --orange: #FF6B35;
+            --dark-red: #8B0000;
+            --blue: #5DADE2;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #f5f5f5;
+            --gray: #2a2a2a;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 69, 69, 0.03) 2px,
+                    rgba(255, 69, 69, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.4;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 3;
+        }
+
+        header {
+            padding: 60px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 10vw, 140px);
+            font-weight: 700;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, var(--red) 0%, var(--orange) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 69, 69, 0.5);
+            animation: glitch 3s infinite;
+            position: relative;
+            display: inline-block;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% {
+                transform: translate(0);
+            }
+            91% {
+                transform: translate(-2px, 2px);
+            }
+            93% {
+                transform: translate(2px, -2px);
+            }
+            95% {
+                transform: translate(-2px, -2px);
+            }
+        }
+
+        .tagline {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(20px, 3vw, 36px);
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 10px;
+            animation: fadeSlideUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--gray) 0%, var(--dark) 100%);
+            border: 2px solid var(--red);
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: cardSlideUp 0.8s ease-out forwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes cardSlideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 69, 69, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--orange);
+            transition: height 0.4s;
+        }
+
+        .stat-card:hover::after {
+            height: 100%;
+        }
+
+        .stat-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(50px, 6vw, 80px);
+            color: var(--red);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(18px, 2vw, 24px);
+            color: var(--light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 500px;
+            background: url('https://i.imgur.com/7nn91Eh.png') center/cover;
+            position: relative;
+            margin: 60px 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 1s ease-out 0.5s both;
+            border: 3px solid var(--red);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(40px, 6vw, 80px);
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin: 80px 0 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--red), var(--orange));
+            animation: lineExpand 1s ease-out forwards;
+        }
+
+        @keyframes lineExpand {
+            to { width: 100%; }
+        }
+
+        .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .clip-container {
+            position: relative;
+            background: var(--gray);
+            border: 2px solid var(--red);
+            overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: clipPop 0.6s ease-out forwards;
+        }
+
+        .clip-container:nth-child(1) { animation-delay: 0.2s; }
+        .clip-container:nth-child(2) { animation-delay: 0.4s; }
+        .clip-container:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes clipPop {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .clip-container:hover {
+            border-color: var(--orange);
+            box-shadow: 0 0 40px rgba(255, 69, 69, 0.4);
+            transform: scale(1.02);
+            transition: all 0.3s;
+        }
+
+        .clip-container iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            display: block;
+        }
+
+        .clip-label {
+            background: linear-gradient(135deg, var(--red) 0%, var(--dark-red) 100%);
+            padding: 15px 20px;
+            font-family: 'Teko', sans-serif;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-top: 2px solid var(--orange);
+        }
+
+        .contact {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--gray) 100%);
+            border: 3px solid var(--orange);
+            padding: 60px 40px;
+            margin: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 69, 69, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .contact-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .discord-tag {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(30px, 5vw, 50px);
+            color: var(--red);
+            margin-top: 20px;
+            letter-spacing: 3px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 69, 69, 0.5); }
+            50% { text-shadow: 0 0 40px rgba(255, 69, 69, 0.9); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            font-family: 'Teko', sans-serif;
+            font-size: 18px;
+            color: var(--gray);
+            border-top: 1px solid var(--dark-red);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            .clips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .banner {
+                height: 300px;
+            }
+        }
+
+        .corner-accent {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .corner-accent.top-left {
+            top: 0;
+            left: 0;
+            border-top: 4px solid var(--red);
+            border-left: 4px solid var(--red);
+            animation: cornerPulse 3s ease-in-out infinite;
+        }
+
+        .corner-accent.bottom-right {
+            bottom: 0;
+            right: 0;
+            border-bottom: 4px solid var(--orange);
+            border-right: 4px solid var(--orange);
+            animation: cornerPulse 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes cornerPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="corner-accent top-left"></div>
+    <div class="corner-accent bottom-right"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">ZYNKOM</div>
+            <div class="tagline">TF2 Assassin • Trickstab Specialist • Airshot Demon</div>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">5000+</div>
+                <div class="stat-label">Hours Logged</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Trickstabs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Elite</div>
+                <div class="stat-label">Spy Main</div>
+            </div>
+        </div>
+
+        <div class="banner"></div>
+
+        <h2 class="section-title">Highlight Clips</h2>
+
+        <div class="clips-grid">
+            <div class="clip-container">
+                <iframe src="https://streamable.com/e/4lsni1?autoplay=1&nocontrols=1" allowfullscreen></iframe>
+                <div class="clip-label">Trickstab Massacre</div>
+            </div>
+            <div class="clip-container">
+                <iframe src="https://streamable.com/e/xr0oqx?autoplay=1&nocontrols=1" allowfullscreen></iframe>
+                <div class="clip-label">Soldier Airshots</div>
+            </div>
+            <div class="clip-container">
+                <iframe src="https://streamable.com/e/l8e0cx?autoplay=1&nocontrols=1" allowfullscreen></iframe>
+                <div class="clip-label">More Airshots</div>
+            </div>
+        </div>
+
+        <div class="contact">
+            <div class="contact-content">
+                <h2 class="section-title">Get In Touch</h2>
+                <p style="font-size: 24px; margin-top: 20px;">Need a ringer? Want coaching? Hit me up.</p>
+                <div class="discord-tag">@zynkom</div>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 ZYNKOM • Team Fortress 2 Portfolio
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.stat-card');
+            const clips = document.querySelectorAll('.clip-container');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            [...cards, ...clips].forEach(el => observer.observe(el));
+
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            let mouseX = 0, mouseY = 0;
+            let currentX = 0, currentY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function animate() {
+                currentX += (mouseX - currentX) * 0.05;
+                currentY += (mouseY - currentY) * 0.05;
+
+                const accents = document.querySelectorAll('.corner-accent');
+                accents.forEach((accent, i) => {
+                    const speed = i === 0 ? 0.02 : -0.02;
+                    const x = currentX * speed;
+                    const y = currentY * speed;
+                    accent.style.transform = `translate(${x}px, ${y}px)`;
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });
+    </script>
+</body>
+</html>
