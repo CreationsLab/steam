@@ -380,6 +380,13 @@
             margin-bottom: 80px;
         }
 
+        .video-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        }
+
         .section-badge {
             display: inline-block;
             padding: 6px 16px;
@@ -838,46 +845,33 @@
             </p>
         </div>
         
-        <div class="video-gallery">
-            <div class="video-card" data-url="4lsni1">
-                <div class="video-thumbnail">
-                    <iframe src="https://streamable.com/e/4lsni1?nocontrols=1" allowfullscreen></iframe>
-                    <div class="play-overlay">
-                        <div class="play-icon"></div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">Spy Trickstabs</div>
-                    <div class="video-desc">60 seconds of advanced trickstab techniques</div>
+    <div class="video-gallery">
+        <div class="video-card" data-video-id="RD9cINmwKzs">
+            <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/RD9cINmwKzs/hqdefault.jpg" alt="TF2 Highlight 1">
+                <div class="play-overlay">
+                    <div class="play-icon"></div>
                 </div>
             </div>
-
-            <div class="video-card" data-url="xr0oqx">
-                <div class="video-thumbnail">
-                    <iframe src="https://streamable.com/e/xr0oqx?nocontrols=1" allowfullscreen></iframe>
-                    <div class="play-overlay">
-                        <div class="play-icon"></div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">Soldier Airshots</div>
-                    <div class="video-desc">Precision airshot compilation</div>
-                </div>
-            </div>
-
-            <div class="video-card" data-url="l8e0cx">
-                <div class="video-thumbnail">
-                    <iframe src="https://streamable.com/e/l8e0cx?nocontrols=1" allowfullscreen></iframe>
-                    <div class="play-overlay">
-                        <div class="play-icon"></div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">Soldier Highlights</div>
-                    <div class="video-desc">Advanced rocket jumping and airshots</div>
-                </div>
+            <div class="video-info">
+                <div class="video-title">TF2 Highlight 1</div>
+                <div class="video-desc">YouTube clip showcase</div>
             </div>
         </div>
+    
+        <div class="video-card" data-video-id="7hAlbOP0qU4">
+            <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/7hAlbOP0qU4/hqdefault.jpg" alt="TF2 Highlight 2">
+                <div class="play-overlay">
+                    <div class="play-icon"></div>
+                </div>
+            </div>
+            <div class="video-info">
+                <div class="video-title">TF2 Highlight 2</div>
+                <div class="video-desc">YouTube clip showcase</div>
+            </div>
+        </div>
+    </div>
     </section>
 
     <!-- Service CTA -->
@@ -919,11 +913,13 @@
                 <div class="contact-type">Direct Message</div>
                 <div class="contact-name">@zynkom</div>
 
-                <div class="contact-card">
+            <div class="contact-card">
                 <i class="fab fa-youtube contact-icon" style="color:#FF0000;"></i>
                 <div class="contact-type">YouTube</div>
                 <div class="contact-name">
-                    <a href="https://www.youtube.com/@iwaseipsteinfavorite" target="_blank" style="color: inherit; text-decoration: none;">
+                    <a href="https://www.youtube.com/@iwaseipsteinfavorite"
+                       target="_blank"
+                       style="color: inherit; text-decoration: none;">
                         @iwaseipsteinfavorite
                     </a>
                 </div>
@@ -944,152 +940,154 @@
         </div>
     </div>
 
-    <script>
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+<script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Video modal functionality
+    const videoCards = document.querySelectorAll('.video-card');
+    const modal = document.getElementById('videoModal');
+    const iframe = document.getElementById('modalIframe');
+
+    videoCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const videoId = card.dataset.videoId;
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
+    });
 
-        // Video modal functionality
-        const videoCards = document.querySelectorAll('.video-card');
-        const modal = document.getElementById('videoModal');
-        const iframe = document.getElementById('modalIframe');
+    function closeVideo() {
+        modal.classList.remove('active');
+        iframe.src = '';
+        document.body.style.overflow = '';
+    }
 
-        videoCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const url = card.dataset.url;
-                iframe.src = `https://streamable.com/e/${url}`;
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-        });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeVideo();
+    });
 
-        function closeVideo() {
-            modal.classList.remove('active');
-            iframe.src = '';
-            document.body.style.overflow = '';
-        }
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeVideo();
+    });
 
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeVideo();
-        });
+    // Globe visualization
+    const canvas = document.getElementById('globe-canvas');
+    const ctx = canvas.getContext('2d', { alpha: true });
+    const TAU = Math.PI * 2;
+    const N = 12000;
+    const pts = [];
+    let w = 0, h = 0, cx = 0, cy = 0, R = 0, rotY = 0;
+    const tX = 0.65;
 
-        // Globe visualization
-        const canvas = document.getElementById('globe-canvas');
-        const ctx = canvas.getContext('2d', { alpha: true });
-        const TAU = Math.PI * 2;
-        const N = 12000; // More points for better quality
-        const pts = [];
-        let w = 0, h = 0, cx = 0, cy = 0, R = 0, rotY = 0;
-        const tX = 0.65;
+    function build() {
+        pts.length = 0;
+        for (let i = 0; i < N; i++) {
+            const k = i + 0.5;
+            const y = 1 - (k / N) * 2;
+            const r = Math.sqrt(Math.max(0, 1 - y * y));
+            const phi = TAU * k * 0.618;
+            const x = Math.cos(phi) * r;
+            const z = Math.sin(phi) * r;
+            const la = Math.asin(y) * 180 / Math.PI;
+            const lo = Math.atan2(z, x) * 180 / Math.PI;
 
-        function build() {
-            pts.length = 0;
-            for (let i = 0; i < N; i++) {
-                const k = i + 0.5;
-                const y = 1 - (k / N) * 2;
-                const r = Math.sqrt(Math.max(0, 1 - y * y));
-                const phi = TAU * k * 0.618;
-                const x = Math.cos(phi) * r;
-                const z = Math.sin(phi) * r;
-                const la = Math.asin(y) * 180 / Math.PI;
-                const lo = Math.atan2(z, x) * 180 / Math.PI;
+            let s = 0;
+            s = Math.max(s, land(la, lo, 46, -103, 18, 30));
+            s = Math.max(s, land(la, lo, 24, -102, 10, 16));
+            s = Math.max(s, land(la, lo, -16, -60, 23, 14));
+            s = Math.max(s, land(la, lo, 52, 15, 12, 18));
+            s = Math.max(s, land(la, lo, 8, 20, 28, 18));
+            s = Math.max(s, land(la, lo, 39, 92, 20, 42));
+            s = Math.max(s, land(la, lo, 20, 112, 12, 16));
+            s = Math.max(s, land(la, lo, -25, 134, 10, 14));
 
-                let s = 0;
-                s = Math.max(s, land(la, lo, 46, -103, 18, 30));
-                s = Math.max(s, land(la, lo, 24, -102, 10, 16));
-                s = Math.max(s, land(la, lo, -16, -60, 23, 14));
-                s = Math.max(s, land(la, lo, 52, 15, 12, 18));
-                s = Math.max(s, land(la, lo, 8, 20, 28, 18));
-                s = Math.max(s, land(la, lo, 39, 92, 20, 42));
-                s = Math.max(s, land(la, lo, 20, 112, 12, 16));
-                s = Math.max(s, land(la, lo, -25, 134, 10, 14));
-
-                if (s > 0.25 || (s > 0.1 && Math.random() < 0.03)) {
-                    pts.push({ x, y, z, sz: 2.5 + Math.random() * 2 });
-                }
+            if (s > 0.25 || (s > 0.1 && Math.random() < 0.03)) {
+                pts.push({ x, y, z, sz: 2.5 + Math.random() * 2 });
             }
         }
+    }
 
-        function land(la, lo, cla, clo, lr, lonr) {
-            const dy = (la - cla) / lr;
-            let dx = lo - clo;
-            while (dx > 180) dx -= 360;
-            while (dx < -180) dx += 360;
-            dx /= lonr;
-            return Math.exp(-(dx * dx + dy * dy));
-        }
+    function land(la, lo, cla, clo, lr, lonr) {
+        const dy = (la - cla) / lr;
+        let dx = lo - clo;
+        while (dx > 180) dx -= 360;
+        while (dx < -180) dx += 360;
+        dx /= lonr;
+        return Math.exp(-(dx * dx + dy * dy));
+    }
 
-        function resize() {
-            const container = canvas.parentElement;
-            const rect = container.getBoundingClientRect();
-            w = rect.width;
-            h = rect.height;
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = w * dpr;
-            canvas.height = h * dpr;
-            canvas.style.width = w + 'px';
-            canvas.style.height = h + 'px';
-            ctx.scale(dpr, dpr);
-            cx = w / 2;
-            cy = h / 2;
-            R = Math.min(w, h) * 0.48; // Larger globe
-        }
+    function resize() {
+        const container = canvas.parentElement;
+        const rect = container.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        cx = w / 2;
+        cy = h / 2;
+        R = Math.min(w, h) * 0.48;
+    }
 
-        function draw() {
-            requestAnimationFrame(draw);
-            ctx.clearRect(0, 0, w, h);
-
-            const cY = Math.cos(rotY);
-            const sY = Math.sin(rotY);
-            const cX = Math.cos(tX);
-            const sX = Math.sin(tX);
-
-            for (let i = 0; i < pts.length; i++) {
-                const p = pts[i];
-                const y1 = p.y * cX - p.z * sX;
-                const z1 = p.y * sX + p.z * cX;
-                const vx = p.x * cY + z1 * sY;
-                const vy = y1;
-                const vz = -p.x * sY + z1 * cY;
-
-                if (vz <= 0) continue;
-
-                const alpha = (0.5 + vz * 0.5) * (vz > 0.2 ? 1 : vz / 0.2);
-                
-                // Enhanced glow effect
-                const gradient = ctx.createRadialGradient(
-                    cx + vx * R, cy + vy * R, 0,
-                    cx + vx * R, cy + vy * R, p.sz * 2
-                );
-                gradient.addColorStop(0, `rgba(240, 129, 33, ${alpha})`);
-                gradient.addColorStop(1, `rgba(240, 129, 33, 0)`);
-
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.arc(cx + vx * R, cy + vy * R, p.sz * 1.5, 0, TAU);
-                ctx.fill();
-
-                // Core dot
-                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
-                ctx.beginPath();
-                ctx.arc(cx + vx * R, cy + vy * R, p.sz * 0.6, 0, TAU);
-                ctx.fill();
-            }
-
-            rotY += 0.001;
-        }
-
-        build();
-        resize();
+    function draw() {
         requestAnimationFrame(draw);
+        ctx.clearRect(0, 0, w, h);
 
-        window.addEventListener('resize', resize);
-    </script>
+        const cY = Math.cos(rotY);
+        const sY = Math.sin(rotY);
+        const cX = Math.cos(tX);
+        const sX = Math.sin(tX);
+
+        for (let i = 0; i < pts.length; i++) {
+            const p = pts[i];
+            const y1 = p.y * cX - p.z * sX;
+            const z1 = p.y * sX + p.z * cX;
+            const vx = p.x * cY + z1 * sY;
+            const vy = y1;
+            const vz = -p.x * sY + z1 * cY;
+
+            if (vz <= 0) continue;
+
+            const alpha = (0.5 + vz * 0.5) * (vz > 0.2 ? 1 : vz / 0.2);
+
+            const gradient = ctx.createRadialGradient(
+                cx + vx * R, cy + vy * R, 0,
+                cx + vx * R, cy + vy * R, p.sz * 2
+            );
+            gradient.addColorStop(0, `rgba(240, 129, 33, ${alpha})`);
+            gradient.addColorStop(1, `rgba(240, 129, 33, 0)`);
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(cx + vx * R, cy + vy * R, p.sz * 1.5, 0, TAU);
+            ctx.fill();
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
+            ctx.beginPath();
+            ctx.arc(cx + vx * R, cy + vy * R, p.sz * 0.6, 0, TAU);
+            ctx.fill();
+        }
+
+        rotY += 0.001;
+    }
+
+    build();
+    resize();
+    requestAnimationFrame(draw);
+
+    window.addEventListener('resize', resize);
+</script>
 </body>
 </html>
